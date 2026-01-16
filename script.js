@@ -4,18 +4,39 @@ const affirmations = [
   "You deserve good things.",
   "Your feelings are valid.",
   "You are growing every day.",
-  "You are stronger than you think."
+  "You are stronger than you think.",
+  "You are allowed to take up space.",
+  "Your progress matters."
 ];
 
-function newAffirmation() {
-  const randomIndex = Math.floor(Math.random() * affirmations.length);
-  const affirmation = affirmations[randomIndex];
-  document.getElementById("affirmation").textContent = affirmation;
-  localStorage.setItem("lastAffirmation", affirmation);
+
+function getAffirmationOfTheDay() {
+  const today = new Date().toDateString();
+  const index = today.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+  return affirmations[index % affirmations.length];
 }
 
-// Load saved affirmation
-const saved = localStorage.getItem("lastAffirmation");
-if (saved) {
-  document.getElementById("affirmation").textContent = saved;
+document.getElementById("affirmation").textContent =
+  getAffirmationOfTheDay();
+
+
+
+const toggle = document.getElementById("darkToggle");
+
+
+if (localStorage.getItem("theme") === "dark") {
+  document.body.classList.add("dark");
+  toggle.textContent = "☀️ Light Mode";
 }
+
+toggle.addEventListener("click", () => {
+  document.body.classList.toggle("dark");
+
+  if (document.body.classList.contains("dark")) {
+    localStorage.setItem("theme", "dark");
+    toggle.textContent = "☀️ Light Mode";
+  } else {
+    localStorage.setItem("theme", "light");
+    toggle.textContent = "🌙 Dark Mode";
+  }
+});
